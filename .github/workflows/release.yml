@@ -1,0 +1,99 @@
+name: release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version'
+        required: true
+  push:
+    tags:
+      - 'v*.*.*'
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build_release:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            os_name: linux
+            arch: x86_64
+          - os: windows-latest
+            os_name: windows
+            arch: x86_64
+          - os: macos-latest
+            os_name: apple-darwin
+            arch: aarch64
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+
+      - name: Build release
+        run: cargo build --release
+
+      - name: Prepare release artifact
+        id: prepare_artifact
+        shell: bash
+        run: |
+          REPO_NAME="${{ github.event.repository.name }}"
+          VERSION="${{ github.event.inputs.version || github.ref_name }}"
+          OS_NAME="${{ matrix.os_name }}"
+          ARCH="${{ matrix.arch }}"
+          
+          if [[ "$OS_NAME" == "windows" ]]; then
+            EXE_NAME="p2wviewer.exe"
+            ARTIFACT_NAME="${REPO_NAME}_${VERSION}_${OS_NAME}_${ARCH}.exe"
+          else
+            EXE_NAME="p2wviewer"
+            ARTIFACT_NAME="${REPO_NAME}_${VERSION}_${OS_NAME}_${ARCH}"
+          fi
+          
+          mv "target/release/$EXE_NAME" "$ARTIFACT_NAME"
+          echo "artifact_name=$ARTIFACT_NAME" >> $GITHUB_OUTPUT
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.prepare_artifact.outputs.artifact_name }}
+          path: ${{ steps.prepare_artifact.outputs.artifact_name }}
+          compression-level: 0
+  
+  create_release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    needs: build_release
+    if: success() && (startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch')
+    
+    steps:
+      - name: Get version
+        id: gv
+        run: |
+          if [ -n "${{ github.event.inputs.version }}" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+          else
+            VERSION="${GITHUB_REF_NAME}"
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.gv.outputs.version }}
+          name: "p2wviewer ${{ steps.gv.outputs.version }}"
+          body: "See release notes for detailed changelog."
+          files: artifacts/**/*
