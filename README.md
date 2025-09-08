@@ -87,6 +87,10 @@ p2wviewer -vv encrypt --input image.jpg --output encrypted.png --password "imf2p
 
 Contributions are welcome\! If you find a bug or have a feature request, please open an issue.
 
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=p2wviewer/p2wviewer&type=Date)](https://www.star-history.com/#p2wviewer/p2wviewer&Date)
+
 ## License
 
 This project is licensed under the Apache 2.0 License. See the `LICENSE` file for details.
