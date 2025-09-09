@@ -13,18 +13,13 @@ A command-line tool written in Rust to encrypt and decrypt images into self-cont
 
 You can download precompiled binaries from the [releases page](https://github.com/p2wviewer/p2wviewer/releases) or automatic github actions artifacts.
 
-## Building from source
+## Build and install from source
 
 Ensure you have the Rust programming language and Cargo, its package manager, installed. If not, you can get them from the [official Rust website](https://www.rust-lang.org/tools/install).
 
-1.  Clone the repository:
+Install the project in release (default) or debug mode:
     ```sh
-    git clone https://github.com/p2wviewer/p2wviewer.git
-    cd p2wviewer
-    ```
-2.  Build the project in release or debug mode:
-    ```sh
-    cargo build
+    cargo install --git https://github.com/p2wviewer/p2wviewer
     ```
 
 ## Usage
