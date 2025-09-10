@@ -1,8 +1,6 @@
 name: nightly
 
-on:
-  schedule:
-    - cron: '0 0 * * 0'
+on: workflow_dispatch
 
 env:
   CARGO_TERM_COLOR: always
