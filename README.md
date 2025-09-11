@@ -1,4 +1,4 @@
-# p2wviewer
+# libp2wviewer
 
 A command-line tool written in Rust to encrypt and decrypt images into self-contained noise images.
 
@@ -11,7 +11,7 @@ A command-line tool written in Rust to encrypt and decrypt images into self-cont
 
 ## Installation
 
-You can download precompiled binaries from the [releases page](https://github.com/p2wviewer/p2wviewer/releases) or automatic github actions artifacts.
+You can download precompiled binaries from the [releases page](https://github.com/p2wviewer/libp2wviewer/releases) or automatic github actions artifacts.
 
 ## Build and install from source
 
@@ -19,7 +19,7 @@ Ensure you have the Rust programming language and Cargo, its package manager, in
 
 Install the project in release (default) or debug mode:
     ```sh
-    cargo install --git https://github.com/p2wviewer/p2wviewer
+    cargo install --git https://github.com/p2wviewer/libp2wviewer
     ```
 
 ## Usage
@@ -29,7 +29,7 @@ Install the project in release (default) or debug mode:
 To encrypt a file, use the `encrypt` subcommand. You must specify the input file, the output file, and one of the authentication methods (`--password` or `--password-file`).
 
 ```sh
-p2wviewer encrypt --input <INPUT_FILE> --output <OUTPUT_FILE> --password <YOUR_PASSWORD>
+libp2wviewer encrypt --input <INPUT_FILE> --output <OUTPUT_FILE> --password <YOUR_PASSWORD>
 ```
 
   - `-i, --input <INPUT_FILE>`: The path to the image you want to encrypt.
@@ -41,7 +41,7 @@ p2wviewer encrypt --input <INPUT_FILE> --output <OUTPUT_FILE> --password <YOUR_P
 **Example:**
 
 ```sh
-p2wviewer encrypt --input path/to/my_photo.png --output encrypted.png --password "paytowin" --split 4
+libp2wviewer encrypt --input path/to/my_photo.png --output encrypted.png --password "paytowin" --split 4
 ```
 
 ### Decrypting an image
@@ -49,7 +49,7 @@ p2wviewer encrypt --input path/to/my_photo.png --output encrypted.png --password
 To decrypt a file, use the `decrypt` subcommand. You must specify the input encrypted file, the desired output file, and the same authentication method used for encryption.
 
 ```sh
-p2wviewer decrypt --input <INPUT_FILE> --output <OUTPUT_FILE> --password <YOUR_PASSWORD>
+libp2wviewer decrypt --input <INPUT_FILE> --output <OUTPUT_FILE> --password <YOUR_PASSWORD>
 ```
 
   - `-i, --input <INPUT_FILE>`: The path to the encrypted noise image.
@@ -60,8 +60,8 @@ p2wviewer decrypt --input <INPUT_FILE> --output <OUTPUT_FILE> --password <YOUR_P
 **Example:**
 
 ```sh
-p2wviewer decrypt --input path/to/encrypted.png --output decrypted.png --password "freetoplay"
-p2wviewer decrypt --input path/to/encrypted/file/dir/ --output decrypted.png --password-file keyfile.txt
+libp2wviewer decrypt --input path/to/encrypted.png --output decrypted.png --password "freetoplay"
+libp2wviewer decrypt --input path/to/encrypted/file/dir/ --output decrypted.png --password-file keyfile.txt
 ```
 
 ## Logging
@@ -75,7 +75,7 @@ You can control the verbosity of the output using the `-v` or `--verbose` flag. 
 **Example:**
 
 ```sh
-p2wviewer -vv encrypt --input image.jpg --output encrypted.png --password "imf2p"
+libp2wviewer -vv encrypt --input image.jpg --output encrypted.png --password "imf2p"
 ```
 
 ## Contributing
@@ -84,7 +84,7 @@ Contributions are welcome\! If you find a bug or have a feature request, please 
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=p2wviewer/p2wviewer&type=Date)](https://www.star-history.com/#p2wviewer/p2wviewer&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=p2wviewer/libp2wviewer&type=Date)](https://www.star-history.com/#p2wviewer/libp2wviewer&Date)
 
 ## License
 
