@@ -50,10 +50,10 @@ jobs:
           ARCH="${{ matrix.arch }}"
           
           if [[ "$OS_NAME" == "windows" ]]; then
-            EXE_NAME="p2wviewer.exe"
+            EXE_NAME="libp2wviewer.exe"
             ARTIFACT_NAME="${REPO_NAME}_${VERSION}_${OS_NAME}_${ARCH}.exe"
           else
-            EXE_NAME="p2wviewer"
+            EXE_NAME="libp2wviewer"
             ARTIFACT_NAME="${REPO_NAME}_${VERSION}_${OS_NAME}_${ARCH}"
           fi
           
@@ -94,6 +94,6 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.gv.outputs.version }}
-          name: "p2wviewer ${{ steps.gv.outputs.version }}"
+          name: "libp2wviewer ${{ steps.gv.outputs.version }}"
           body: "See release notes for detailed changelog."
           files: artifacts/**/*
