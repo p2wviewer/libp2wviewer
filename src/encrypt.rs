@@ -82,7 +82,7 @@ pub fn run(opts: EncryptOptions) -> Result<()> {
 
             let split_img = bti(&padded_chunk, width, new_height)?;
             let path = output_dir.join(format!(
-                "{}_part_{}.{}",
+                "{}.{}.{}",
                 output_stem,
                 i + 1,
                 output_ext
