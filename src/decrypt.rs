@@ -17,7 +17,7 @@ pub struct DecryptOptions {
 fn get_image_bytes(path: &PathBuf) -> Result<Vec<u8>> {
     if path.is_dir() {
         info!("Input is a directory, searching for split parts...");
-        let re = Regex::new(r"_part_(\d+)\.(png|PNG)$").unwrap();
+        let re = Regex::new(r"\.(\d+)\.(png|PNG)$").unwrap();
         let mut files_with_parts: Vec<(u32, PathBuf)> = Vec::new();
 
         for entry in fs::read_dir(path)? {
