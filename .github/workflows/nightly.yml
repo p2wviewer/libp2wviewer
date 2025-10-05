@@ -25,7 +25,7 @@ jobs:
 
     - name: Test
       shell: bash
-      run: ./test.sh
+      run: chmod +x ./test.sh && bash ./test.sh
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
