@@ -82,6 +82,10 @@ libp2wviewer -vv encrypt --input image.jpg --output encrypted.png --password "im
 
 Contributions are welcome\! If you find a bug or have a feature request, please open an issue.
 
+## About update frequency
+
+I am still a student, and have many other stuffs to do. Once a month, or any time I am free, the repo will be updated.
+
 ## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=p2wviewer/libp2wviewer&type=Date)](https://www.star-history.com/#p2wviewer/libp2wviewer&Date)
