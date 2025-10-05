@@ -1,6 +1,16 @@
-use anyhow::{Result, bail};
-use byteorder::{ByteOrder, BigEndian};
-use log::{debug, info, warn};
+use anyhow::{
+    Result,
+    bail
+};
+use byteorder::{
+    ByteOrder,
+    BigEndian
+};
+use log::{
+    debug,
+    info,
+    warn
+};
 
 // HEADER_SIZE is now 65 bytes (57 + 8 for payload_len)
 pub const HEADER_SIZE: usize = 65;
@@ -15,7 +25,7 @@ pub struct Header {
     pub salt: [u8; 16],
     pub width: u32,
     pub height: u32,
-    pub payload_len: u64, // length of the final data
+    pub payload_len: u64, // length of the f data
 }
 
 impl Header {

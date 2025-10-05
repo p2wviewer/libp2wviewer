@@ -1,15 +1,36 @@
-use anyhow::{Result, anyhow};
-use aes_gcm::{Aes256Gcm, Key, Nonce}; // AES-GCM 256-bit
-use aes_gcm::aead::{Aead, KeyInit, OsRng};
+use anyhow::{
+    Result,
+    anyhow
+};
+use aes_gcm::{
+    Aes256Gcm,
+    Key,
+    Nonce
+};
+use aes_gcm::aead::{
+    Aead,
+    KeyInit,
+    OsRng
+};
 use aes_gcm::aead::rand_core::RngCore;
-use argon2::{Argon2, PasswordHasher};
+use argon2::{
+    Argon2,
+    PasswordHasher
+};
 use argon2::password_hash::SaltString;
-use sha2::{Sha256, Digest};
-use log::{info, debug, warn};
+use sha2::{
+    Sha256,
+    Digest
+};
+use log::{
+    info,
+    debug,
+    warn
+};
 use std::fs;
 use rand::RngCore as OldRngCore;
 
-pub fn derive_key_from_password(password: &str, salt_opt: Option<[u8; 16]>) -> Result<([u8; 32], [u8; 16])> {
+pub fn pwd2key(password: &str, salt_opt: Option<[u8; 16]>) -> Result<([u8; 32], [u8; 16])> {
     info!("Generating key from password string using Argon2");
     let salt = match salt_opt {
         Some(s) => s,
@@ -34,10 +55,10 @@ pub fn derive_key_from_password(password: &str, salt_opt: Option<[u8; 16]>) -> R
 }
 
 /// Hash the file using SHA256
-pub fn derive_key_from_file(path: &str) -> Result<([u8; 32], [u8; 16])> {
+pub fn file2key(path: &str) -> Result<([u8; 32], [u8; 16])> {
     info!("Hash key from file: {}", path);
     let data = fs::read(path)?;
-    let mut hasher = Sha256::new();
+    let mut hasher = Sha256::new(); // Du dumm? rust analyser
     hasher.update(&data);
     let result = hasher.finalize();
     let mut key = [0u8; 32];
@@ -56,7 +77,7 @@ pub fn generate_nonce() -> [u8; 12] {
 
 /// Selfcheck token
 pub fn generate_token(key: &[u8; 32]) -> [u8; 32] {
-    let mut hasher = Sha256::new();
+    let mut hasher = Sha256::new(); // bist du dumm? rust analyzer, hör auf!
     hasher.update(key);
     let result = hasher.finalize();
     let mut token = [0u8; 32];
@@ -65,7 +86,7 @@ pub fn generate_token(key: &[u8; 32]) -> [u8; 32] {
     token
 }
 
-/// Encrypt mit AES-GCM
+/// Encrypt with AES-GCM
 pub fn encrypt(key: &[u8; 32], nonce_bytes: &[u8; 12], plaintext: &[u8]) -> Result<(Vec<u8>, [u8; 16])> {
     let key = Key::<Aes256Gcm>::from_slice(key);
     let cipher = Aes256Gcm::new(key);
@@ -77,7 +98,7 @@ pub fn encrypt(key: &[u8; 32], nonce_bytes: &[u8; 12], plaintext: &[u8]) -> Resu
             warn!("AES-GCM encryption failed: {:?}", e);
             anyhow::anyhow!("AES-GCM encryption failed: {:?}", e)
         })?;
-    // Split the ciphertext and the authentication tag
+    // Split the ciphertext and the auth tag
     let (ciphertext, auth_tag) = ciphertext_with_tag.split_at(ciphertext_with_tag.len() - 16);
     let mut auth_tag_array = [0u8; 16];
     auth_tag_array.copy_from_slice(auth_tag);
@@ -95,9 +116,8 @@ pub fn decrypt(key: &[u8; 32], nonce_bytes: &[u8; 12], ciphertext: &[u8], auth_t
     ciphertext_with_tag.extend_from_slice(auth_tag);
     debug!("Decrypting {} bytes", ciphertext.len());
     let plaintext = cipher.decrypt(nonce, ciphertext_with_tag.as_ref())
-        .map_err(|_| {
-            // Provide a user-friendly error instead of the raw crypto error
-            anyhow!("Decryption failed. The password may be incorrect or the data is corrupted.")
+        .map_err(|e| {
+            anyhow!("Decryption failed: {}", e)
         })?;
     info!("Decryption successful, length {}", plaintext.len());
     Ok(plaintext)

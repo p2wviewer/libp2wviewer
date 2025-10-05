@@ -1,9 +1,20 @@
-use anyhow::{Result, bail};
-use image::{DynamicImage, ImageBuffer, Rgba};
-use log::{debug, info, warn};
+use anyhow::{
+    Result,
+    bail
+};
+use image::{
+    DynamicImage,
+    ImageBuffer,
+    Rgba
+};
+use log::{
+    debug,
+    info,
+    warn
+};
 use std::path::Path;
 
-pub fn load_image<P: AsRef<Path>>(path: P) -> Result<DynamicImage> {
+pub fn load<P: AsRef<Path>>(path: P) -> Result<DynamicImage> {
     info!("Loading image from {:?}", path.as_ref());
     let img = image::open(&path).map_err(|e| {
         warn!("Failed to open image: {}", e);
@@ -13,7 +24,7 @@ pub fn load_image<P: AsRef<Path>>(path: P) -> Result<DynamicImage> {
     Ok(img)
 }
 
-pub fn save_image<P: AsRef<Path>>(img: &DynamicImage, path: P) -> Result<()> {
+pub fn save<P: AsRef<Path>>(img: &DynamicImage, path: P) -> Result<()> {
     info!("Saving image to {:?}", path.as_ref());
     img.save(&path).map_err(|e| {
         warn!("Failed to save image: {}", e);
@@ -23,9 +34,8 @@ pub fn save_image<P: AsRef<Path>>(img: &DynamicImage, path: P) -> Result<()> {
     Ok(())
 }
 
-/// Byte zu Image
-/// Expects `data.len() % 4 == 0`
-pub fn bti(data: &[u8], width: u32, height: u32) -> Result<DynamicImage> {
+// Byte to Image convert
+pub fn byte2img(data: &[u8], width: u32, height: u32) -> Result<DynamicImage> {
     if data.len() != (width * height * 4) as usize {
         bail!("Data length {} does not match dimensions {}x{} (expected {})",
             data.len(),
@@ -41,7 +51,7 @@ pub fn bti(data: &[u8], width: u32, height: u32) -> Result<DynamicImage> {
 }
 
 /// image to byte
-pub fn itb(img: &DynamicImage) -> Vec<u8> {
+pub fn img2byte(img: &DynamicImage) -> Vec<u8> {
     let rgba = img.to_rgba8();
     let buf = rgba.into_raw();
     debug!("Converted image {}x{} to {} bytes", img.width(), img.height(), buf.len());

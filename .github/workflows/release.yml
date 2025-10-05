@@ -40,6 +40,10 @@ jobs:
       - name: Build release
         run: cargo build --release
 
+      - name: Test
+        shell: bash
+        run: ./test.sh
+
       - name: Prepare release artifact
         id: prepare_artifact
         shell: bash
